@@ -1,103 +1,58 @@
+import math
 import toga
-from random import randint
 from toga.style.pack import COLUMN, LEFT, RIGHT, ROW, Pack
-
+from toga.colors import WHITE, rgb
+from toga.fonts import SANS_SERIF
+import pygame
 def button_handler(widget):
-    print('button handler')
-    for i in range(0, 10):
-        print("hello", i)
-        yield 1
-    print("done", i)
+    print('Answer Received')
 
 
-def action0(widget):
-    print("action 0")
-
-
-def action1(widget):
-    print("action 1")
-
-
-def action2(widget):
-    print("action 2")
-
-
-def action3(widget):
-    print("action 3")
+def level1(widget):
+    print("Level 1")
     
+def level2(widget):
+    print("Level 2")
+    
+def level3(widget):
+    print("Level 3")
+
+def level4(widget):
+    print("Level 4")
+
+def level5(widget):
+    print("Level 5")
+
+
 def build(app):
-    enc_box = toga.Box()
-    hello_box = toga.Box()
-    box = toga.Box()
-
-    enc_input = toga.TextInput(readonly=True)
-    hello_input = toga.TextInput()
-
-    enc_label = toga.Label('when encrypted', style=Pack(text_align=LEFT))
-    hello_label = toga.Label('Please type "hello"', style=Pack(text_align=LEFT))
-    join_label = toga.Label('becomes ', style=Pack(text_align=RIGHT))
-
-    def calculate(widget):
-        try:
-            enc_input.value = str(hello_input.value)
-            key = randint(1, 10)
-            ciphertext = ''
-            for char in enc_input.value:
-                unicode_a = ord(char)
-                unicode_c = unicode_a + key
-                new_letter = chr(unicode_c)
-                ciphertext += new_letter
-            enc_input.value = ciphertext
-        except ValueError:
-            enc_input.value = '???'
-
-    button = toga.Button('Calculate', on_press=calculate)
-
-    hello_box.add(hello_input)
-    hello_box.add(hello_label)
-
-    enc_box.add(join_label)
-    enc_box.add(enc_input)
-    enc_box.add(enc_label)
-
-    box.add(hello_box)
-    box.add(enc_box)
-    box.add(button)
-
-    box.style.update(direction=COLUMN, padding_top=10)
-    hello_box.style.update(direction=ROW, padding=5)
-    enc_box.style.update(direction=ROW, padding=5)
-
-    enc_input.style.update(flex=1)
-    hello_input.style.update(flex=1, padding_left=160)
-    enc_label.style.update(width=100, padding_left=10)
-    hello_label.style.update(width=100, padding_left=10)
-    join_label.style.update(width=150, padding_right=10)
-
-    button.style.update(padding=15, flex=1)
-    '''brutus_icon = "icons/brutus"
-    cricket_icon = "icons/cricket-72.png"
+    level1_icon = "icons/chicken-level1.png"
+    level2_icon = "icons/cat-level2.png"
+    level3_icon = "icons/fox-level3.png"
+    level4_icon = "icons/lion-level4.png"
+    level5_icon = "icons/tiger-level5.png"
 
     data = [
-        ('root%s' % i, 'value %s' % i)
-        for i in range(1, 100)
+        ('Question1' , 'Points Receive: 3 ' , 'Which 100-mile long waterway links the Mediterranean and the Red Sea?'),
+        ('Question2' , 'Points Receive: 5' , 'What is the capital of Kenya?'),
+        ('Question3' , 'Points Receive: 7' , 'The average of first 50 natural numbers is?'),
+        ('Question4' , 'Points Receive: 9' , 'The number of 3-digit numbers divisible by 6?'),
+        ('Question5' , 'Points Receive: 11' , 'Which is the second longest river in Africa?')
     ]
 
-    left_container = toga.Table(headings=['Hello', 'World'], data=data)
+    left_container = toga.Table(headings=['Questions', 'Points Per Question', 'Contents'], data = data)
 
     right_content = toga.Box(
         style=Pack(direction=COLUMN, padding_top=50)
     )
-
-    for b in range(0, 10):
+    for b in range(1, 6):
         right_content.add(
             toga.Button(
-                'Hello world %s' % b,
+                'Answer %s' % b,
                 on_press=button_handler,
                 style=Pack(width=200, padding=20)
             )
         )
-
+        print("Answer number", b, "is :")
     right_container = toga.ScrollContainer(horizontal=False)
 
     right_container.content = right_content
@@ -106,57 +61,52 @@ def build(app):
 
     split.content = [left_container, right_container]
 
-    things = toga.Group('Things')
+    levels = toga.Group('Levels')
 
     cmd0 = toga.Command(
-        action0,
-        label='Action 0',
-        tooltip='Perform action 0',
-        icon=brutus_icon,
-        group=things
+        level1,
+        label='Level 1',
+        tooltip='Perform level 0',
+        icon=level1_icon,
+        group=levels
     )
     cmd1 = toga.Command(
-        action1,
-        label='Action 1',
-        tooltip='Perform action 1',
-        icon=brutus_icon,
-        group=things
+        level2,
+        label='Level 2',
+        tooltip='Perform level 1',
+        icon=level2_icon,
+        group=levels
     )
     cmd2 = toga.Command(
-        action2,
-        label='Action 2',
-        tooltip='Perform action 2',
-        icon=toga.Icon.TOGA_ICON,
-        group=things
+        level3,
+        label='Level 3',
+        tooltip='Perform level 2',
+        icon=level3_icon,
+        group=levels
     )
     cmd3 = toga.Command(
-        action3,
-        label='Action 3',
-        tooltip='Perform action 3',
+        level4,
+        label='Level 4',
+        tooltip='Perform level 3',
         shortcut=toga.Key.MOD_1 + 'k',
-        icon=cricket_icon
+        icon=level4_icon
     )
-
-    def action4(widget):
-        print("CALLING Action 4")
-        cmd3.enabled = not cmd3.enabled
 
     cmd4 = toga.Command(
-        action4,
-        label='Action 4',
-        tooltip='Perform action 4',
-        icon=brutus_icon
+        level5,
+        label='Level 5',
+        tooltip='Perform level 4',
+        icon=level5_icon
     )
 
-    app.commands.add(cmd1, cmd3, cmd4, cmd0)
-    app.main_window.toolbar.add(cmd1, cmd2, cmd3, cmd4)
+    app.commands.add(cmd1, cmd2, cmd3, cmd4)
+    app.main_window.toolbar.add(cmd0, cmd1, cmd2, cmd3, cmd4)
 
-    #return split'''
-    return box#, split
+    return split
 
 
 def main():
-    return toga.App('CodeBreaker', 'com.project', startup=build)
+    return toga.App('Math & History Learning', 'org.beeware.helloworld', startup=build)
 
 
 if __name__ == '__main__':
